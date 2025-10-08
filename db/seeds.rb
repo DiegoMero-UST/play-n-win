@@ -1,9 +1,16 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# Create initial prizes
+puts "Creating initial prizes..."
+GameCreationService.create_initial_prizes!
+
+# Create a sample game to test
+puts "Creating sample game..."
+game = GameCreationService.create_game!
+puts "Created game with token: #{game.token}"
+
+# Show the card distribution
+puts "\nCard distribution:"
+game.cards.ordered_by_position.each do |card|
+  puts "Position #{card.position}: #{card.prize.name}"
+end
+
+puts "\nGame setup complete!"
